@@ -12,12 +12,18 @@ export default {
   name: 'app',
   components: {
     HelloWorld
+  },
+  mounted () {
+    let start = Date.now()
+    this.$gapi.then(gapi => {
+      console.log(`gapi client loaded in ${Date.now() - start} ms :`, gapi)
+    })
   }
 }
 </script>
 <style lang="stylus">
 #app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
+  font-family Avenir, Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   text-align center
