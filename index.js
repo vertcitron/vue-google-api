@@ -4,13 +4,11 @@
  *
  *************************************************************************************************/
 
-import loadGAPI from './src/core/loadGAPIlib'
+import gapi from './src/core/gapi'
 
 export default {
   /** Plugin install method */
   install (Vue) {
-    Object.defineProperty(Vue.prototype, '$gapi', {
-      get: loadGAPI
-    })
+    Object.defineProperty(Vue.prototype, '$gapi', { value: gapi })
   }
 }

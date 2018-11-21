@@ -14,10 +14,10 @@ export default {
     HelloWorld
   },
   mounted () {
-    let start = Date.now()
-    this.$gapi.then(gapi => {
-      console.log(`gapi client loaded in ${Date.now() - start} ms :`, gapi)
-    })
+    this.$gapi.client.init()
+      .then(client => {
+        console.log(client)
+      })
   }
 }
 </script>
