@@ -14,9 +14,10 @@ export default {
     HelloWorld
   },
   mounted () {
-    this.$gapi._clientInit()
-      .then(client => {
-        console.log('gapi client =', client)
+    const lib = 'client'
+    this.$gapi._libraryInit(lib)
+      .then(library => {
+        console.log(`gapi ${lib} =`, library)
       })
       .catch(err => {
         console.error(err)

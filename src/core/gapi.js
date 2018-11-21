@@ -66,38 +66,38 @@ export default class GAPI {
     })
   }
 
-  /** Exposes the client object, loading it if it hasn't been done */
-  _clientLoad () {
+  /** Exposes a gapi library object, loading it if it hasn't been done */
+  _libraryLoad (lib) {
     return this._load()
       .then(gapi => {
-        if (gapi.client) return Promise.resolve(gapi.client)
+        if (gapi[lib]) return Promise.resolve(gapi[lib])
         return new Promise((resolve, reject) => {
-          gapi.load('client', {
+          gapi.load(lib, {
             timeout: timeout,
             callback: () => {
-              resolve(gapi.client)
+              resolve(gapi[lib])
             },
             onerror: err => {
-              reject(new Error(`Error on gapi client load: ${err.message}`))
+              reject(new Error(`Error on gapi ${lib} load: ${err.message}`))
             },
             ontimeout: () => {
-              reject(new Error(`Error on gapi client load: timeout`))
+              reject(new Error(`Error on gapi ${lib} load: timeout`))
             }
           })
         })
       })
   }
 
-  /** Initialize the client object with config before each API call.
-   *  Return the client object through a Promise. */
-  _clientInit () {
-    return this._clientLoad()
-      .then(client => {
-        return client.init(this.config)
+  /** Initialize a gapi library object with config before each API call.
+   *  Return the library object through a Promise. */
+  _libraryInit (lib) {
+    return this._libraryLoad(lib)
+      .then(library => {
+        return library.init(this.config)
           .then(() => {
-            return Promise.resolve(client)
+            return Promise.resolve(library)
           }, () => {
-            return Promise.reject(new Error('Error on gapi client init.'))
+            return Promise.reject(new Error(`Error on gapi ${lib} init.`))
           })
       })
   }
