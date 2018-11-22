@@ -2,6 +2,9 @@
   <div id="app">
     <h1>Vue Google API</h1>
     <google-user v-model="user"></google-user>
+    <div v-if="user">
+      <button @click="request">make a GET people/me request with names and email addresses.</button>
+    </div>
   </div>
 </template>
 
@@ -13,6 +16,19 @@ export default {
   data () {
     return {
       user: undefined
+    }
+  },
+  methods: {
+    request () {
+      this.$gapi.request({
+        path: 'https://people.googleapis.com/v1/people/me',
+        method: 'GET',
+        params: {
+          personFields: 'names,emailAddresses'
+        }
+      }).then(response => {
+        console.log(response.result)
+      })
     }
   },
   mounted () {
@@ -49,7 +65,7 @@ body
     font-weight bold
     color lighten(base-text-color, 10)
     &:hover
-      background-color darken(primary, 30)
+      background-color darken(primary, 75)
       box-shadow 3px 3px 12px rgba(black, 0.33)
       color white
     &:focus

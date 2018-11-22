@@ -4,7 +4,7 @@
  *
  *************************************************************************************************/
 
-import GAPI from './src/core/GAPI'
+import GAPI from './src/core/gapi'
 import GoogleSigninBtn from './src/components/GoogleSigninBtn'
 
 export default {

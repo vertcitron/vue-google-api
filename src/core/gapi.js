@@ -114,7 +114,8 @@ export default class GAPI {
       .then(library => {
         return library.init(config)
           .then(response => {
-            return Promise.resolve(response)
+            // if auth2, returns the google auth object, the library otherwise
+            return Promise.resolve((lib === 'auth2') ? response : library)
           }, () => {
             return Promise.reject(new Error(`Error on gapi ${lib} init.`))
           })
@@ -165,6 +166,14 @@ export default class GAPI {
           auth.disconnect()
         }
         return Promise.resolve()
+      })
+  }
+
+  /** Makes a generic API request */
+  request (args) {
+    return this._libraryInit('client')
+      .then(client => {
+        return client.request(args)
       })
   }
 }

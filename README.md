@@ -1,6 +1,6 @@
 # vue-google-api
 
-This vue 2 plugin is a wrapper for the script needed to do client side operations with Google APIs operations and Google authentication.
+This vue 2 plugin is a wrapper for the script needed to do client side operations with Google APIs and Google authentication.
 
 The plugin loads the Google API client library script dynamically, and append it to the document's head, without need to manually edit `index.html` file. This makes the `gapi` object accessible at `window.gapi` and you can do with it all the operations described in the [Google client library for Javascript documentation](https://developers.google.com/api-client-library/javascript/).
 
@@ -33,6 +33,9 @@ Vue.use(VueGoogleApi, config)
 
 In normal usage, `$gapi` cares, when a final method is requested, to do all the intermediate stuff that is needed, such as loading parts of the client (commonly `client` and `auth2`), initializing them and performing required checks. It then returns a fulfilled promise containing the requested result in cas eof success, or a rejected promise in case of error, eventually containing various explanations about what happened.
 
+&nbsp;
+
+---
 > **Vue.$gapi.isSignedIn()**
 
 Returns through an always resolved promise a boolean indicating if a user is actually signed in or not.
@@ -43,6 +46,9 @@ this.$gapi.isSignedIn()
   })
 ```
 
+&nbsp;
+
+---
 > **Vue.$gapi.currentUser()**
 
 Returns through an always resolved promise the current user in a readable format if one is connected, or `null` if no user is connected.
@@ -68,6 +74,9 @@ The user object corresponds to the [Google User Basic Profile](https://developer
 }
 ```
 
+&nbsp;
+
+---
 > **Vue.$gapi.signIn()**
 
 Starts an Oauth2 sign in process. It will open the Google authentification popup where the user will be prompted to identify, with a prefilled profile if the browser was already connected the the Google account. It could be followed by a password request and / or a captcha request, and then by another popup where the user has to authorize the application if it has never been done and depending on the application requested scope.
@@ -86,6 +95,9 @@ this.$gapi.signIn()
   })
 ```
 
+&nbsp;
+
+---
 > **Vue.$gapi.signOut()**
 
 Disconnects the signed in user from the application. Returns an empty resolved promise when it's done.
@@ -95,6 +107,27 @@ this.$gapi.signOut()
     console.log('User disconnected.')
   })
 ```
+
+&nbsp;
+
+---
+> **Vue.$gapi.request(args)**
+
+Makes a generic request to one of the several Google's APIs endpoint, as specified in the [Google API Client Reference](https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiclientrequestargs). Only the `path` property is mandatory, all the other ones are optional. Depending of several things and the authorizations the user has granted to the application, the method responds by a resolved promise containing the response, or a reject one containing a structure where informations on why it has failed can be found.
+
+```javascript
+this.$gapi.request({
+  path: 'https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses',
+  method: 'GET',
+  params: {
+    personFields: 'names,emailAddresses'
+  }
+}).then(response => {
+  console.log(response)
+})
+```
+
+To find and use Google's APIs endpoints, please refer to each API documentation, this is not the purpose of this Readme.
 
 ## Google Signin button component
 
@@ -121,12 +154,17 @@ It optionally takes two attributes:
 </style>
 ```
 
+&nbsp;
+
 ## Intermediate methods
 
 The methods seen above automatically calls and wait for intermediate methods that loads the required parts of the client and initialize what is needed. The wrapper always check if the required object need to be loaded or is already present, and need to be initialized or not, and acts in consequence.
 
 But if you need, for special purposes, to directly access these intermediate methods and their results, they are all exposed prefixed by an underscore: _
 
+&nbsp;
+
+---
 > **Vue.$gapi._load()**
 
 Loads the gapi global object and returns it through a promise. If it has already been loaded, directly resolves the promise without reloading it:
@@ -138,6 +176,9 @@ this.$gapi._load()
 ```
 This object is exactly the base object where lives all the methods explained in the [Google API Client Javascript Library reference](https://developers.google.com/api-client-library/javascript/reference/referencedocs#top_of_page), and you can perform on it all the operations they describe.
 
+&nbsp;
+
+---
 > **Vue.$gapi._libraryLoad('lib')**
 
 Loads a gapi sub library by its name (for example `client` or `auth2`). It makes an internal call to `$gapi._load()` so `gapi` is previously loaded if it hasn't been done. It returns through a promise the sub library itself. If the sub library has already been loaded, it doesn't reload it and resolves immediately. If it hasn't already been done, the sub library have to be initialized.
@@ -148,6 +189,9 @@ this.$gapi._libraryLoad('auth2')
   })
 ```
 
+&nbsp;
+
+---
 > **Vue.$gapi._libraryInit('lib', [ config ])**
 
 Initializes the specified library with an application config. As usual, loads `gapi` if needed and loads the library if needed too by an internal call to `_libraryLoad`.
@@ -171,8 +215,7 @@ this.$gapi._libraryInit('client', { discoveryDocs: [ 'https://people.googleapis.
 ```
 Even if you didn't completed the discoveryDocs property at the plugin installation time, you'll get a client with the people API facility. You can also give for different APIs different clientIds and apiKeys if you want to track hits from different Google Cloud accounts or projects for example.
 
-
-
+&nbsp;
 
 ## Development setup
 
@@ -190,8 +233,9 @@ Then create at the root of the project a .env.local file with your own Google ap
 VUE_APP_CLIENTID=your_client_id.apps.googleusercontent.com
 VUE_APP_APIKEY=your_api_key
 VUE_APP_SCOPE=your_application_scope
-
 ```
+You can also add a VUE_APP_DISCOVERYDOCS key / value if you need.
+
 This file will not be versionned by git and will remain local in your computer.
 
 Otherwise you can modify the `main.js` file to directly introduce these values if you don't want to use a .env file.
