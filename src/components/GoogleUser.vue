@@ -1,10 +1,10 @@
 <template>
   <div class="user">
-    <div v-if="user" class="card">
-      <img v-if="user.image" :src="user.image">
+    <div v-if="value" class="card">
+      <img v-if="value.image" :src="value.image">
       <div class="infos">
-        <div class="name">{{user.name}}</div>
-        <div class="email">{{user.email}}</div>
+        <div class="name">{{value.name}}</div>
+        <div class="email">{{value.email}}</div>
         <button class="signout" @click="signout">
           Sign Out
         </button>
@@ -20,13 +20,19 @@ import GoogleSigninBtn from './GoogleSigninBtn'
 export default {
   name: 'GoogleUser',
   components: { GoogleSigninBtn },
-  props: [ 'user' ],
+  props: [ 'value' ],
   methods: {
     signin () {
-      console.log('SIGN IN')
+      this.$gapi.signIn()
+        .then(user => {
+          this.$emit('input', user)
+        })
     },
     signout () {
-      console.log('SIGN OUT')
+      this.$gapi.signOut()
+        .then(() => {
+          this.$emit('input', undefined)
+        })
     }
   }
 }

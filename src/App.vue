@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>Vue Google API</h1>
-    <google-user :user="user"></google-user>
+    <google-user v-model="user"></google-user>
   </div>
 </template>
 

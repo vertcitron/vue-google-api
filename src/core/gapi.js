@@ -26,6 +26,20 @@
 const timeout = 5000
 const gapiUrl = 'https://apis.google.com/js/api.js'
 
+/** Formats a GoogleUser basic profile object to something readable */
+function _formatUser (guser) {
+  if (!guser.getBasicProfile) return undefined
+  const profile = guser.getBasicProfile()
+  return {
+    id: profile.getId(),
+    name: profile.getName(),
+    firstname: profile.getGivenName(),
+    lastname: profile.getFamilyName(),
+    image: profile.getImageUrl(),
+    email: profile.getEmail()
+  }
+}
+
 export default class GAPI {
   /**
    * The constructor expect as parameter the config object, containing
@@ -115,18 +129,37 @@ export default class GAPI {
     return this._libraryInit('auth2')
       .then(auth => {
         if (auth.isSignedIn.get()) {
-          const profile = auth.currentUser.get().getBasicProfile()
-          return Promise.resolve({
-            id: profile.getId(),
-            name: profile.getName(),
-            firstname: profile.getGivenName(),
-            lastname: profile.getFamilyName(),
-            image: profile.getImageUrl(),
-            email: profile.getEmail()
-          })
+          return Promise.resolve(_formatUser(auth.currentUser.get()))
         } else {
           return Promise.resolve()
         }
+      })
+  }
+
+  /** Starts the signin process - returns a promise resolved with the user if
+   *  signin successfull, or rejected otherwise */
+  signIn () {
+    return this._libraryInit('auth2')
+      .then(auth => {
+        if (auth.isSignedIn.get()) {
+          return Promise.resolve(_formatUser(auth.currentUser.get()))
+        } else {
+          return auth.signIn()
+            .then(guser => {
+              return Promise.resolve(_formatUser(guser))
+            })
+        }
+      })
+  }
+
+  /** Disconnects the current user */
+  signOut () {
+    return this._libraryInit('auth2')
+      .then(auth => {
+        if (auth.isSignedIn.get()) {
+          auth.disconnect()
+        }
+        return Promise.resolve()
       })
   }
 }
