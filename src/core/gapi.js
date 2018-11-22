@@ -28,7 +28,7 @@ const gapiUrl = 'https://apis.google.com/js/api.js'
 
 /** Formats a GoogleUser basic profile object to something readable */
 function _formatUser (guser) {
-  if (!guser.getBasicProfile) return undefined
+  if (!guser.getBasicProfile) return null
   const profile = guser.getBasicProfile()
   return {
     id: profile.getId(),
@@ -104,10 +104,15 @@ export default class GAPI {
 
   /** Initialize a gapi library object with config before each API call.
    *  Return the library object through a Promise. */
-  _libraryInit (lib) {
+  _libraryInit (lib, config = {}) {
+    // fills omitted parameters wit hmain config ones if needed
+    config.apiKey = config.apiKey || this.config.apiKey
+    config.clientId = config.clientId || this.config.clientId
+    config.scope = config.scope || this.config.scope
+    config.discoveryDocs = config.discoveryDocs || this.config.discoveryDocs
     return this._libraryLoad(lib)
       .then(library => {
-        return library.init(this.config)
+        return library.init(config)
           .then(response => {
             return Promise.resolve(response)
           }, () => {
@@ -131,7 +136,7 @@ export default class GAPI {
         if (auth.isSignedIn.get()) {
           return Promise.resolve(_formatUser(auth.currentUser.get()))
         } else {
-          return Promise.resolve()
+          return Promise.resolve(null)
         }
       })
   }

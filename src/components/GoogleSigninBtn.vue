@@ -1,5 +1,7 @@
 <template>
-  <div class="g-signin" @click="$emit('click')">
+  <div class="g-signin" :class="customClass"
+    @click.prevent.stop="$emit('click')"
+    @keypress.enter.prevent.stop="$emit('click')">
     <span class="icon"></span>
     <span class="text">{{label}}</span>
   </div>
@@ -9,7 +11,8 @@
 export default {
   name: 'GoogleSignInBtn',
   props: {
-    label: { type: String, default: 'Sign In with Google' }
+    label: { type: String, default: 'Sign In with Google' },
+    'custom-class': { type: String, default: '' }
   }
 }
 </script>
