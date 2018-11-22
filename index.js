@@ -4,11 +4,11 @@
  *
  *************************************************************************************************/
 
-import gapi from './src/core/gapi'
+import GAPI from './src/core/GAPI'
 
 export default {
   /** Plugin install method */
-  install (Vue) {
-    Object.defineProperty(Vue.prototype, '$gapi', { value: gapi })
+  install (Vue, config) {
+    Object.defineProperty(Vue.prototype, '$gapi', { value: new GAPI(config) })
   }
 }

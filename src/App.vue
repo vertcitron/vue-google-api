@@ -14,9 +14,12 @@ export default {
     HelloWorld
   },
   mounted () {
-    this.$gapi.client.init()
+    this.$gapi._clientInit()
       .then(client => {
-        console.log(client)
+        console.log('gapi client =', client)
+      })
+      .catch(err => {
+        console.error(err)
       })
   }
 }
