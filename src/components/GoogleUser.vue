@@ -10,16 +10,14 @@
         </button>
       </div>
     </div>
-    <google-signin-btn v-else @click.native="signin"></google-signin-btn>
+    <google-signin-btn v-else @click="signin"></google-signin-btn>
   </div>
 </template>
 
 <script>
-import GoogleSigninBtn from './GoogleSigninBtn'
-
 export default {
   name: 'GoogleUser',
-  components: { GoogleSigninBtn },
+  components: {},
   props: [ 'value' ],
   methods: {
     signin () {
