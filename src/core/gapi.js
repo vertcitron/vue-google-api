@@ -94,11 +94,39 @@ export default class GAPI {
     return this._libraryLoad(lib)
       .then(library => {
         return library.init(this.config)
-          .then(() => {
-            return Promise.resolve(library)
+          .then(response => {
+            return Promise.resolve(response)
           }, () => {
             return Promise.reject(new Error(`Error on gapi ${lib} init.`))
           })
+      })
+  }
+
+  /** returns asynchronously true if the user is signed in */
+  isSignedIn () {
+    return this._libraryInit('auth2')
+      .then(auth => {
+        return Promise.resolve(auth.isSignedIn.get())
+      })
+  }
+
+  /** returns the current user if signed in, undefined otherwise */
+  currentUser () {
+    return this._libraryInit('auth2')
+      .then(auth => {
+        if (auth.isSignedIn.get()) {
+          const profile = auth.currentUser.get().getBasicProfile()
+          return Promise.resolve({
+            id: profile.getId(),
+            name: profile.getName(),
+            firstname: profile.getGivenName(),
+            lastname: profile.getFamilyName(),
+            image: profile.getImageUrl(),
+            email: profile.getEmail()
+          })
+        } else {
+          return Promise.resolve()
+        }
       })
   }
 }
