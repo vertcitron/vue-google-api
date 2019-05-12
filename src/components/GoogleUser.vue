@@ -36,31 +36,38 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.user
-  display table
-  margin 32px auto
+<style scoped>
+.user {
+  display: table;
+  margin: 32px auto;
+}
 
-  .card
-    display flex
-    flex-direction row
-    justify-content space-between
-    align-items center
-    box-shadow 2px 2px 8px rgba(black, 0.25)
-    border-radius 4px
-    padding 32px
-    background-color white
+.user .card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  padding: 32px;
+  background-color: white;
+}
 
-    .infos
-      text-align right
-      padding-left 32px
-      .name
-        font-size 20px
-        font-weight bold
-        margin-bottom 6px
-      .email
-        font-size 16px
-        font-weight bold
-        font-style italic
-        margin-bottom 16px
+.user .card .infos {
+  text-align: right;
+  padding-left: 32px;
+}
+
+.user .card .infos .name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.user .card .infos .email {
+  font-size: 16px;
+  font-weight: bold;
+  font-style: italic;
+  margin-bottom: 16px;
+}
 </style>
