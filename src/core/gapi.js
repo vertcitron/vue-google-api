@@ -130,6 +130,11 @@ export default class GAPI {
       })
   }
 
+  /** returns asynchronously true if the user is signed in */
+  getAuthObject () {
+    return this._libraryInit('auth2')
+  }
+
   /** returns the current user if signed in, undefined otherwise */
   currentUser () {
     return this._libraryInit('auth2')
