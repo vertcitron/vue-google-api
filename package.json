@@ -9,6 +9,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "set-value": "^2.0.1",
     "vue": "^2.5.17"
   },
   "devDependencies": {
