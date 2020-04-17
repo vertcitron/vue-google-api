@@ -149,13 +149,13 @@ export default class GAPI {
 
   /** Starts the signin process - returns a promise resolved with the user if
    *  signin successfull, or rejected otherwise */
-  signIn () {
+  signIn (options) {
     return this._libraryInit('auth2')
       .then(auth => {
         if (auth.isSignedIn.get()) {
           return Promise.resolve(_formatUser(auth.currentUser.get()))
         } else {
-          return auth.signIn()
+          return auth.signIn(options)
             .then(guser => {
               return Promise.resolve(_formatUser(guser))
             })
