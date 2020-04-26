@@ -40,6 +40,12 @@ function _formatUser (guser) {
   }
 }
 
+/** Get the response object from the user's auth session. */
+function _formatAuthObject (guser) {
+  if (!guser.getAuthResponse) return null
+  return guser.getAuthResponse()
+}
+
 export default class GAPI {
   /**
    * The constructor expect as parameter the config object, containing
@@ -130,9 +136,16 @@ export default class GAPI {
       })
   }
 
-  /** returns asynchronously true if the user is signed in */
+  /** returns the current user auth data if signed in, undefined otherwise */
   getAuthObject () {
     return this._libraryInit('auth2')
+      .then(auth => {
+        if (auth.isSignedIn.get()) {
+          return Promise.resolve(_formatAuthObject(auth.currentUser.get()))
+        } else {
+          return Promise.resolve(null)
+        }
+      })
   }
 
   /** returns the current user if signed in, undefined otherwise */
