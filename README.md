@@ -1,5 +1,7 @@
 # vue-google-api
 
+## This project is outdated and no longer maintained, I can't find time to do what should be done here. Really sorry, if someone wants to maintain it, tell me, I accept to transfer ownership, or even without asking me, fork it...
+
 This vue 2 plugin is a wrapper for the script needed to do client side operations with Google APIs and Google authentication.
 
 The plugin loads the Google API client library script dynamically, and append it to the document's head, without need to manually edit `index.html` file. This makes the `gapi` object accessible at `window.gapi` and you can do with it all the operations described in the [Google client library for Javascript documentation](https://developers.google.com/api-client-library/javascript/).
