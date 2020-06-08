@@ -168,9 +168,13 @@ export default class GAPI {
     return this._libraryInit('auth2')
       .then(auth => {
         if (auth.isSignedIn.get()) {
-          auth.disconnect()
+          return auth.disconnect()
+            .then(() => {
+              return Promise.resolve()
+            })
+        } else {
+          return Promise.resolve()
         }
-        return Promise.resolve()
       })
   }
 
