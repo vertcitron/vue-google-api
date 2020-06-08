@@ -79,6 +79,34 @@ The user object corresponds to the [Google User Basic Profile](https://developer
 &nbsp;
 
 ---
+> **Vue.$gapi.getAuthObject()**
+
+Returns through an always resolved promise the current user auth session data in a readable format if one is connected, or `null` if no user is connected.
+```javascript
+this.$gapi.getAuthObject()
+  .then(authData => {
+    if (authData) {
+      console.log('Current user access_token is %s', authData.access_token)
+    } else {
+      console.log('No user is connected.')
+    }
+  })
+```
+The user auth session object corresponds to the [Google User Auth Response](https://developers.google.com/identity/sign-in/web/reference#gapiauth2authresponse) informations, in a friendly format :
+```javascript
+{
+  access_token: google_user_access_token_granted,
+  id_token: id_token_granted,
+  scope: given_name,
+  expires_in: seconds_until_access_token_expires,
+  first_issued_at: user_first_grant_request,
+  expires_at: timestamp_which_access_token_expire
+}
+```
+
+&nbsp;
+
+---
 > **Vue.$gapi.signIn()**
 
 Starts an Oauth2 sign in process. It will open the Google authentification popup where the user will be prompted to identify, with a prefilled profile if the browser was already connected the the Google account. It could be followed by a password request and / or a captcha request, and then by another popup where the user has to authorize the application if it has never been done and depending on the application requested scope.
